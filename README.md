@@ -1,75 +1,73 @@
-# React + TypeScript + Vite
+📘 TicketFlow – React Ticket Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+TicketFlow is a lightweight ticket management system built with React + TypeScript.
+It allows users to create, edit, and track support tickets easily — all stored locally in the browser using LocalStorage.
 
-Currently, two official plugins are available:
+The design is inspired by a Twig-based UI, recreated with inline CSS for simplicity and modern responsiveness.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+🚀 Features
 
-## React Compiler
+✅ User Authentication (Signup / Login / Logout)
+✅ Dashboard with Ticket Statistics
+✅ Create, Edit, and Delete Tickets
+✅ Local Storage Data Persistence (No backend required)
+✅ Modern Inline Styling (no Tailwind or external CSS)
+✅ Responsive Design – looks great on desktop & mobile
+✅ TypeScript-safe with strong typing for Tickets and Users
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+🧱 Tech Stack
+Category	Technology
+Frontend Framework	React (TypeScript)
+Routing	React Router v6
+State Management	React useState + Local Storage
+Styling	Inline CSS (No Tailwind / No CSS Framework)
+Deployment	Vercel / Netlify compatible
 
-Note: This will impact Vite dev & build performances.
+📁 Project Structure
 
-## Expanding the ESLint configuration
+ticketflow-react/
+│
+├── src/
+│   ├── components/
+│   │   ├── Navbar.tsx
+│   │   └── RequireAuth.tsx
+│   │
+│   ├── pages/
+│   │   ├── Landings.tsx
+│   │   ├── Login.tsx
+│   │   ├── Signup.tsx
+│   │   ├── Dashboard.tsx
+│   │   ├── TicketList.tsx
+│   │   ├── CreateTicket.tsx
+│   │   └── EditTickets.tsx
+│   │
+│   ├── utils/
+│   │   └── storage.ts      # LocalStorage helper functions
+│   │
+│   ├── types/
+│   │   └── index.ts        # Type definitions for Tickets & Users
+│   │
+│   └── App.tsx             # Main app routes & navbar logic
+│
+├── public/
+│   ├── index.html
+│   └── favicon.ico
+│
+├── package.json
+├── tsconfig.json
+├── README.md
+└── vite.config.ts
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+1️⃣ Clone the repository
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+git clone https://github.com/<your-username>/ticketflow-react.git
+cd ticketflow-react
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+2️⃣ Install dependencies
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+npm install
+# or
+yarn install
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+https://ticket-flow-react.vercel.app/
