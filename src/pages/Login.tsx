@@ -7,10 +7,66 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState<string>("");
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const navigate = useNavigate();
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleBlur = (field: string) => {
+    setTouched({ ...touched, [field]: true });
+    const errs = { ...fieldErrors };
+
+    if (field === "email") {
+      if (!email.trim()) {
+        errs.email = "Email is required.";
+      } else if (!validateEmail(email)) {
+        errs.email = "Please enter a valid email address.";
+      } else {
+        delete errs.email;
+      }
+    }
+
+    if (field === "password") {
+      if (!password.trim()) {
+        errs.password = "Password is required.";
+      } else if (password.length < 6) {
+        errs.password = "Password must be at least 6 characters.";
+      } else {
+        delete errs.password;
+      }
+    }
+
+    setFieldErrors(errs);
+  };
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Mark all fields as touched
+    setTouched({ email: true, password: true });
+
+    // Validate all fields
+    const errs: Record<string, string> = {};
+    if (!email.trim()) {
+      errs.email = "Email is required.";
+    } else if (!validateEmail(email)) {
+      errs.email = "Please enter a valid email address.";
+    }
+
+    if (!password.trim()) {
+      errs.password = "Password is required.";
+    } else if (password.length < 6) {
+      errs.password = "Password must be at least 6 characters.";
+    }
+
+    setFieldErrors(errs);
+    if (Object.keys(errs).length > 0) return;
+
+    // Check credentials
     const users = getUsers();
     const user = users.find((u: any) => u.email === email && u.password === password);
 
@@ -21,6 +77,10 @@ export default function Login() {
     }
 
     setCurrentUser(user);
+    
+    // 🔥 Dispatch custom event to notify Navbar of auth change
+    window.dispatchEvent(new Event("authChange"));
+    
     setError("");
     setSuccess("🎉 Logged in successfully!");
     setTimeout(() => navigate("/dashboard"), 1000);
@@ -68,6 +128,7 @@ export default function Login() {
               padding: "0.75rem",
               borderRadius: "0.5rem",
               marginBottom: "1rem",
+              textAlign: "center",
             }}
           >
             {success}
@@ -81,6 +142,7 @@ export default function Login() {
               padding: "0.75rem",
               borderRadius: "0.5rem",
               marginBottom: "1rem",
+              textAlign: "center",
             }}
           >
             {error}
@@ -94,36 +156,73 @@ export default function Login() {
                 fontSize: "0.875rem",
                 fontWeight: 600,
                 color: "#374151",
-                marginBottom: "0.25rem",
+                marginBottom: "0.5rem",
                 display: "block",
               }}
             >
-              Email
+              Email *
             </label>
             <input
               type="email"
               required
               placeholder="Enter your email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (touched.email) {
+                  const errs = { ...fieldErrors };
+                  if (!e.target.value.trim()) {
+                    errs.email = "Email is required.";
+                  } else if (!validateEmail(e.target.value)) {
+                    errs.email = "Please enter a valid email address.";
+                  } else {
+                    delete errs.email;
+                  }
+                  setFieldErrors(errs);
+                }
+              }}
+              onBlur={() => handleBlur("email")}
               style={{
                 width: "100%",
-                padding: "0.5rem 1rem",
-                border: "1px solid #d1d5db",
+                padding: "0.75rem 1rem",
+                border: touched.email && fieldErrors.email
+                  ? "2px solid #dc2626"
+                  : "1px solid #d1d5db",
                 borderRadius: "0.5rem",
                 outline: "none",
                 fontSize: "1rem",
+                backgroundColor: "#ffffff",
+                color: "#000000",
                 transition: "all 0.2s",
+                WebkitAppearance: "none",
+                MozAppearance: "none",
+                appearance: "none",
               }}
               onFocus={(e) => {
-                e.currentTarget.style.borderColor = "#2563eb";
-                e.currentTarget.style.boxShadow = "0 0 0 3px rgba(37,99,235,0.3)";
+                if (!fieldErrors.email) {
+                  e.currentTarget.style.borderColor = "#2563eb";
+                  e.currentTarget.style.boxShadow = "0 0 0 3px rgba(37,99,235,0.3)";
+                }
               }}
-              onBlur={(e) => {
-                e.currentTarget.style.borderColor = "#d1d5db";
-                e.currentTarget.style.boxShadow = "none";
+              onBlurCapture={(e) => {
+                if (!fieldErrors.email) {
+                  e.currentTarget.style.borderColor = "#d1d5db";
+                  e.currentTarget.style.boxShadow = "none";
+                }
               }}
             />
+            {touched.email && fieldErrors.email && (
+              <p style={{ 
+                color: "#dc2626", 
+                marginTop: "6px", 
+                fontSize: "0.875rem",
+                display: "flex",
+                alignItems: "center",
+                gap: "4px"
+              }}>
+                <span>⚠️</span> {fieldErrors.email}
+              </p>
+            )}
           </div>
 
           <div>
@@ -132,36 +231,73 @@ export default function Login() {
                 fontSize: "0.875rem",
                 fontWeight: 600,
                 color: "#374151",
-                marginBottom: "0.25rem",
+                marginBottom: "0.5rem",
                 display: "block",
               }}
             >
-              Password
+              Password *
             </label>
             <input
               type="password"
               required
               placeholder="Enter your password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                if (touched.password) {
+                  const errs = { ...fieldErrors };
+                  if (!e.target.value.trim()) {
+                    errs.password = "Password is required.";
+                  } else if (e.target.value.length < 6) {
+                    errs.password = "Password must be at least 6 characters.";
+                  } else {
+                    delete errs.password;
+                  }
+                  setFieldErrors(errs);
+                }
+              }}
+              onBlur={() => handleBlur("password")}
               style={{
                 width: "100%",
-                padding: "0.5rem 1rem",
-                border: "1px solid #d1d5db",
+                padding: "0.75rem 1rem",
+                border: touched.password && fieldErrors.password
+                  ? "2px solid #dc2626"
+                  : "1px solid #d1d5db",
                 borderRadius: "0.5rem",
                 outline: "none",
                 fontSize: "1rem",
+                backgroundColor: "#ffffff",
+                color: "#000000",
                 transition: "all 0.2s",
+                WebkitAppearance: "none",
+                MozAppearance: "none",
+                appearance: "none",
               }}
               onFocus={(e) => {
-                e.currentTarget.style.borderColor = "#2563eb";
-                e.currentTarget.style.boxShadow = "0 0 0 3px rgba(37,99,235,0.3)";
+                if (!fieldErrors.password) {
+                  e.currentTarget.style.borderColor = "#2563eb";
+                  e.currentTarget.style.boxShadow = "0 0 0 3px rgba(37,99,235,0.3)";
+                }
               }}
-              onBlur={(e) => {
-                e.currentTarget.style.borderColor = "#d1d5db";
-                e.currentTarget.style.boxShadow = "none";
+              onBlurCapture={(e) => {
+                if (!fieldErrors.password) {
+                  e.currentTarget.style.borderColor = "#d1d5db";
+                  e.currentTarget.style.boxShadow = "none";
+                }
               }}
             />
+            {touched.password && fieldErrors.password && (
+              <p style={{ 
+                color: "#dc2626", 
+                marginTop: "6px", 
+                fontSize: "0.875rem",
+                display: "flex",
+                alignItems: "center",
+                gap: "4px"
+              }}>
+                <span>⚠️</span> {fieldErrors.password}
+              </p>
+            )}
           </div>
 
           <button
@@ -177,6 +313,7 @@ export default function Login() {
               fontSize: "1rem",
               cursor: "pointer",
               transition: "background-color 0.3s",
+              marginTop: "0.5rem",
             }}
             onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#1d4ed8")}
             onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#2563eb")}
@@ -188,12 +325,12 @@ export default function Login() {
         <p
           style={{
             textAlign: "center",
-            marginTop: "1rem",
+            marginTop: "1.5rem",
             fontSize: "0.875rem",
             color: "#4b5563",
           }}
         >
-          Don’t have an account?{" "}
+          Don't have an account?{" "}
           <Link
             to="/signup"
             style={{
