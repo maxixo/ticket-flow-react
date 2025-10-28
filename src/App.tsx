@@ -21,7 +21,7 @@ export default function App() {
   const shouldShowNavbar = user && !hideNavbarPaths.includes(location.pathname);
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+    <div style={{ minHeight: "100vh", fontFamily: "'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",  display: "flex", flexDirection: "column" }}>
       {/* ✅ Render Navbar only for logged-in users and not on public pages */}
       {shouldShowNavbar && <Navbar />}
 
