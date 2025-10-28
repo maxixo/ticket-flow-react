@@ -23,7 +23,7 @@ export default function Navbar() {
     <nav
       className="navbar"
       style={{
-        background: "linear-gradient(to right, #2563eb, #7c3aed)",
+        background: "white",
         color: "#fff",
         display: "flex",
         justifyContent: "space-between",
@@ -40,6 +40,7 @@ export default function Navbar() {
       {/* ✅ Logo text cleaned — no stray characters */}
       <div
         style={{
+          color: "#2563eb",
           fontWeight: 700,
           fontSize: "1.25rem",
           letterSpacing: "0.5px",
@@ -87,7 +88,7 @@ export default function Navbar() {
           to="/dashboard"
           onClick={() => handleLinkClick("/dashboard")}
           style={{
-            color: "white",
+            color: "#2563eb",
             textDecoration: "none",
             fontWeight: 500,
             fontSize: "1rem",
@@ -96,38 +97,14 @@ export default function Navbar() {
           Dashboard
         </Link>
 
-        <Link
-          to="/tickets"
-          onClick={() => handleLinkClick("/tickets")}
-          style={{
-            color: "white",
-            textDecoration: "none",
-            fontWeight: 500,
-            fontSize: "1rem",
-          }}
-        >
-          Tickets
-        </Link>
 
-        <Link
-          to="/tickets/create"
-          onClick={() => handleLinkClick("/tickets/create")}
-          style={{
-            color: "white",
-            textDecoration: "none",
-            fontWeight: 500,
-            fontSize: "1rem",
-          }}
-        >
-          Create
-        </Link>
 
         <button
           onClick={() => handleLinkClick("/login")}
           style={{
             background: "none",
             border: "none",
-            color: "#fca5a5",
+            color: "red",
             fontWeight: 600,
             cursor: "pointer",
             fontSize: "1rem",
