@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getTickets } from "../utils/storage";
 import type { Ticket } from "../types";
+import Navbar from "../components/Navbar"; // ✅ Add Navbar import
 
 export default function Dashboard() {
   const [tickets, setTickets] = useState<Ticket[]>([]);
@@ -27,8 +28,14 @@ export default function Dashboard() {
   const recent = [...tickets].slice(-5).reverse();
 
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#f9fafb" }}>
-    
+    <div style={{  backgroundColor: "#f9fafb",  margin: 0, padding: "3em" // ✅ remove all default body margins
+       , minHeight: "100vh" }}>
+      {/* ✅ Navbar at top */}
+      <div style={{ background: "linear-gradient(to bottom right, #2563eb, #7c3aed)", margin: 0,
+          padding: 0, }}>
+        <Navbar />
+      </div>
+
       {/* Dashboard Content */}
       <div
         style={{
@@ -40,10 +47,10 @@ export default function Dashboard() {
       >
         <h2
           style={{
-            fontSize: "2rem",
+            fontSize: "1.5rem",
             fontWeight: 700,
             color: "#1f2937",
-            marginTop: "2rem",
+            marginTop: "1rem",
             marginBottom: "2rem",
           }}
         >
@@ -84,10 +91,22 @@ export default function Dashboard() {
                 e.currentTarget.style.transform = "translateY(0)";
               }}
             >
-              <p style={{ color: "#6b7280", fontSize: "0.875rem", marginBottom: "0.25rem" }}>
+              <p
+                style={{
+                  color: "#6b7280",
+                  fontSize: "0.875rem",
+                  marginBottom: "0.25rem",
+                }}
+              >
                 {stat.label}
               </p>
-              <h2 style={{ color: stat.color, fontSize: "1.875rem", fontWeight: 700 }}>
+              <h2
+                style={{
+                  color: stat.color,
+                  fontSize: "1.875rem",
+                  fontWeight: 700,
+                }}
+              >
                 {stat.count}
               </h2>
             </div>
@@ -103,7 +122,7 @@ export default function Dashboard() {
             marginBottom: "2rem",
           }}
         >
-          {/* Completion */}
+          {/* Completion Rate */}
           <div
             style={{
               backgroundColor: "white",
@@ -135,11 +154,10 @@ export default function Dashboard() {
                 style={{
                   width: `${completionRate}%`,
                   height: "100%",
-                  background:
-                    "linear-gradient(to right, #3b82f6, #2563eb)",
+                  background: "linear-gradient(to right, #3b82f6, #2563eb)",
                   transition: "width 0.5s",
                 }}
-              ></div>
+              />
             </div>
             <p
               style={{
@@ -210,10 +228,7 @@ export default function Dashboard() {
                   borderRadius: "0.5rem",
                   padding: "0.75rem 1rem",
                   marginBottom: "0.5rem",
-                  transition: "background-color 0.3s",
                 }}
-                onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#f3f4f6")}
-                onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#f9fafb")}
               >
                 <div>
                   <p style={{ margin: 0, fontWeight: 600, color: "#1f2937" }}>{t.title}</p>
@@ -280,7 +295,7 @@ export default function Dashboard() {
   );
 }
 
-// Inline helper for Priority Rows
+// Priority helper
 const renderPriority = (label: string, count: number, bg: string, color: string) => (
   <div
     style={{

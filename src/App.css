@@ -1,7 +1,6 @@
 #root {
   max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  margin:  auto;
   text-align: center;
 }
 
@@ -39,4 +38,116 @@
 
 .read-the-docs {
   color: #888;
+}
+
+/* src/App.css */
+
+/* Global container width */
+/* NAVBAR STYLES */
+/* NAVBAR STYLES */
+.navbar {
+  background: linear-gradient(to bottom right, #2563eb, #7c3aed);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: all 0.3s ease;
+}
+
+.navbar-brand {
+  font-size: 1rem;
+  font-weight: 300;
+  color: white;
+  white-space: nowrap;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.navbar-links a {
+  color: #ffffffcc;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+
+.navbar-links a:hover {
+  color: #fff;
+}
+
+/* HAMBURGER BUTTON */
+.navbar-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.75rem;
+  cursor: pointer;
+}
+
+/* SMALL SCREENS (tablets and below) */
+@media (max-width: 768px) {
+  .navbar {
+    flex-wrap: wrap;
+    padding: 1rem 1.25rem;
+  }
+
+  .navbar-links {
+    flex-direction: column;
+    width: 100%;
+    display: none;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 0.5rem;
+    margin-top: 1rem;
+    padding: 1rem 0;
+  }
+
+  .navbar-links.active {
+    display: flex;
+  }
+
+  .navbar-toggle {
+    display: block;
+  }
+}
+
+/* EXTRA-SMALL SCREENS (phones below 480px) */
+@media (max-width: 480px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.75rem 1rem;
+  }
+
+  .navbar-brand {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .navbar-toggle {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    font-size: 1.5rem;
+  }
+
+  .navbar-links {
+    width: 100%;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .navbar-links a {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 0;
+    font-size: 0.95rem;
+  }
 }

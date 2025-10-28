@@ -1,6 +1,7 @@
 // src/pages/Landings.tsx
 import React from "react";
 import { Link } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 const Landing: React.FC = () => {
   return (
@@ -16,57 +17,7 @@ const Landing: React.FC = () => {
         }}
       >
         {/* NAVBAR */}
-        <nav
-          style={{
-            background: "rgba(255, 255, 255, 0.1)",
-            backdropFilter: "blur(10px)",
-            position: "sticky",
-            top: 0,
-            zIndex: 50,
-          }}
-        >
-          <div
-            style={{
-              maxWidth: "1440px",
-              margin: "0 auto",
-              padding: "1rem 2rem",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              boxSizing: "border-box",
-            }}
-          >
-            <h1 style={{ fontSize: "1.75rem", fontWeight: 700, color: "white", margin: 0 }}>
-              TicketFlow
-            </h1>
-            <div style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
-              <Link
-                to="/login"
-                style={navLinkStyle}
-                onMouseOver={(e) => (e.currentTarget.style.color = "white")}
-                onMouseOut={(e) => (e.currentTarget.style.color = "#ffffffcc")}
-              >
-                Login
-              </Link>
-              <Link
-                to="/contact"
-                style={navLinkStyle}
-                onMouseOver={(e) => (e.currentTarget.style.color = "white")}
-                onMouseOut={(e) => (e.currentTarget.style.color = "#ffffffcc")}
-              >
-                Contact
-              </Link>
-              <Link
-                to="/ticket"
-                style={navLinkStyle}
-                onMouseOver={(e) => (e.currentTarget.style.color = "white")}
-                onMouseOut={(e) => (e.currentTarget.style.color = "#ffffffcc")}
-              >
-                Tickets
-              </Link>
-            </div>
-          </div>
-        </nav>
+              <Navbar />
 
         {/* HERO CONTENT */}
         <div
@@ -362,12 +313,12 @@ const FooterSection = ({
   </div>
 );
 
-// Navbar link base style
-const navLinkStyle: React.CSSProperties = {
-  color: "#ffffffcc",
-  fontWeight: 600,
-  textDecoration: "none",
-  transition: "color 0.3s",
-};
+// // Navbar link base style
+// const navLinkStyle: React.CSSProperties = {
+//   color: "#ffffffcc",
+//   fontWeight: 600,
+//   textDecoration: "none",
+//   transition: "color 0.3s",
+// };
 
 export default Landing;

@@ -41,7 +41,7 @@ export default function CreateTicket() {
   };
 
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#f9fafb", padding: "2rem 0" }}>
+    <div style={{ minHeight: "100vh", backgroundColor: "#f9fafb", padding: "5rem" }}>
       <div style={{ maxWidth: 1440, margin: "0 auto", padding: "0 16px" }}>
         <div style={{ background: "#fff", borderRadius: 12, boxShadow: "0 4px 8px rgba(0,0,0,0.06)", padding: 24 }}>
           <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 16 }}>Create New Ticket</h2>
