@@ -1,4 +1,3 @@
-// src/pages/Login.tsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getUsers, setCurrentUser } from "../utils/storage";
@@ -31,12 +30,14 @@ export default function Login() {
     <div
       style={{
         minHeight: "100vh",
-        background: "linear-gradient(to bottom right, #2563eb, #7c3aed)",
+        width: "100vw",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        background: "linear-gradient(to bottom right, #2563eb, #7c3aed)",
         padding: "1rem",
         boxSizing: "border-box",
+        overflow: "hidden",
       }}
     >
       <div
@@ -98,7 +99,7 @@ export default function Login() {
             gap: "1rem",
           }}
         >
-          {/* Email Field */}
+          {/* Email */}
           <div>
             <label
               style={{
@@ -118,7 +119,7 @@ export default function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               style={{
-                width: "100%",
+                width: "90%",
                 padding: "0.5rem 1rem",
                 border: "1px solid #d1d5db",
                 borderRadius: "0.5rem",
@@ -137,7 +138,7 @@ export default function Login() {
             />
           </div>
 
-          {/* Password Field */}
+          {/* Password */}
           <div>
             <label
               style={{
@@ -157,7 +158,7 @@ export default function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               style={{
-                width: "100%",
+                width: "90%",
                 padding: "0.5rem 1rem",
                 border: "1px solid #d1d5db",
                 borderRadius: "0.5rem",
@@ -176,7 +177,7 @@ export default function Login() {
             />
           </div>
 
-          {/* Submit Button */}
+          {/* Button */}
           <button
             type="submit"
             style={{
