@@ -1,23 +1,23 @@
 // src/pages/Dashboard.tsx
-import  { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { getTickets } from "../utils/storage";
-import type { Ticket } from "../types/index";
+import type { Ticket } from "../types";
 
 export default function Dashboard() {
   const [tickets, setTickets] = useState<Ticket[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setTickets(getTickets());
-    // no dependency on tickets to avoid infinite loop
   }, []);
 
   const total = tickets.length;
   const open = tickets.filter((t) => t.status === "open").length;
   const inProgress = tickets.filter((t) => t.status === "in_progress").length;
   const closed = tickets.filter((t) => t.status === "closed").length;
-  const completionRate = total > 0 ? Math.round((closed / total) * 100) : 0;
 
+  const completionRate = total > 0 ? Math.round((closed / total) * 100) : 0;
   const priorityStats = {
     high: tickets.filter((t) => t.priority === "high").length,
     medium: tickets.filter((t) => t.priority === "medium").length,
@@ -26,97 +26,282 @@ export default function Dashboard() {
 
   const recent = [...tickets].slice(-5).reverse();
 
-  const renderPriority = (label: string, count: number, bg: string, color: string) => (
-    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-      <span style={{ fontSize: 14, color: "#4b5563" }}>{label}</span>
-      <span style={{ padding: "4px 10px", background: bg, color, borderRadius: 9999, fontSize: 12, fontWeight: 600 }}>
-        {count}
-      </span>
-    </div>
-  );
-
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#f9fafb", padding: "2rem 0" }}>
-      <div style={{ maxWidth: 1440, margin: "0 auto", padding: "0 16px" }}>
-        <h2 style={{ fontSize: 28, fontWeight: 700, marginBottom: 24 }}>Dashboard</h2>
+    <div style={{ minHeight: "100vh", backgroundColor: "#f9fafb" }}>
+    
+      {/* Dashboard Content */}
+      <div
+        style={{
+          maxWidth: "1280px",
+          margin: "0 auto",
+          padding: "2rem 1rem",
+          boxSizing: "border-box",
+        }}
+      >
+        <h2
+          style={{
+            fontSize: "2rem",
+            fontWeight: 700,
+            color: "#1f2937",
+            marginTop: "2rem",
+            marginBottom: "2rem",
+          }}
+        >
+          Dashboard
+        </h2>
 
-        {/* Stats */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(250px,1fr))", gap: 16, marginBottom: 24 }}>
-          <div style={{ background: "#fff", borderRadius: 12, boxShadow: "0 4px 8px rgba(0,0,0,0.06)", padding: 20, textAlign: "center" }}>
-            <p style={{ color: "#6b7280", fontSize: 14 }}>Total Tickets</p>
-            <h2 style={{ fontSize: 28, color: "#2563eb", margin: 0 }}>{total}</h2>
-          </div>
-          <div style={{ background: "#fff", borderRadius: 12, boxShadow: "0 4px 8px rgba(0,0,0,0.06)", padding: 20, textAlign: "center" }}>
-            <p style={{ color: "#6b7280", fontSize: 14 }}>Open</p>
-            <h2 style={{ fontSize: 28, color: "#16a34a", margin: 0 }}>{open}</h2>
-          </div>
-          <div style={{ background: "#fff", borderRadius: 12, boxShadow: "0 4px 8px rgba(0,0,0,0.06)", padding: 20, textAlign: "center" }}>
-            <p style={{ color: "#6b7280", fontSize: 14 }}>In Progress</p>
-            <h2 style={{ fontSize: 28, color: "#ca8a04", margin: 0 }}>{inProgress}</h2>
-          </div>
-          <div style={{ background: "#fff", borderRadius: 12, boxShadow: "0 4px 8px rgba(0,0,0,0.06)", padding: 20, textAlign: "center" }}>
-            <p style={{ color: "#6b7280", fontSize: 14 }}>Closed</p>
-            <h2 style={{ fontSize: 28, color: "#374151", margin: 0 }}>{closed}</h2>
-          </div>
+        {/* Stats Cards */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+            gap: "1.5rem",
+            marginBottom: "2rem",
+          }}
+        >
+          {[
+            { label: "Total Tickets", count: total, color: "#2563eb" },
+            { label: "Open", count: open, color: "#16a34a" },
+            { label: "In Progress", count: inProgress, color: "#ca8a04" },
+            { label: "Closed", count: closed, color: "#374151" },
+          ].map((stat, idx) => (
+            <div
+              key={idx}
+              style={{
+                backgroundColor: "white",
+                padding: "1.5rem",
+                borderRadius: "0.75rem",
+                boxShadow: "0 4px 6px rgba(0,0,0,0.05)",
+                textAlign: "center",
+                transition: "transform 0.2s, box-shadow 0.2s",
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.boxShadow = "0 6px 12px rgba(0,0,0,0.1)";
+                e.currentTarget.style.transform = "translateY(-3px)";
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.boxShadow = "0 4px 6px rgba(0,0,0,0.05)";
+                e.currentTarget.style.transform = "translateY(0)";
+              }}
+            >
+              <p style={{ color: "#6b7280", fontSize: "0.875rem", marginBottom: "0.25rem" }}>
+                {stat.label}
+              </p>
+              <h2 style={{ color: stat.color, fontSize: "1.875rem", fontWeight: 700 }}>
+                {stat.count}
+              </h2>
+            </div>
+          ))}
         </div>
 
-        {/* Completion + Priority */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: 16, marginBottom: 24 }}>
-          <div style={{ background: "#fff", borderRadius: 12, boxShadow: "0 4px 8px rgba(0,0,0,0.06)", padding: 20 }}>
-            <h3 style={{ fontSize: 16, fontWeight: 600, color: "#1f2937", marginBottom: 12 }}>Completion Rate</h3>
-            <div style={{ marginBottom: 8, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span style={{ fontSize: 12, fontWeight: 600, color: "#2563eb" }}>{completionRate}% Complete</span>
+        {/* Completion Rate + Priority Breakdown */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))",
+            gap: "1.5rem",
+            marginBottom: "2rem",
+          }}
+        >
+          {/* Completion */}
+          <div
+            style={{
+              backgroundColor: "white",
+              padding: "1.5rem",
+              borderRadius: "0.75rem",
+              boxShadow: "0 4px 6px rgba(0,0,0,0.05)",
+            }}
+          >
+            <h3
+              style={{
+                fontSize: "1rem",
+                fontWeight: 600,
+                color: "#1f2937",
+                marginBottom: "1rem",
+              }}
+            >
+              Completion Rate
+            </h3>
+            <div
+              style={{
+                height: "1rem",
+                borderRadius: "9999px",
+                backgroundColor: "#e5e7eb",
+                overflow: "hidden",
+                marginBottom: "1rem",
+              }}
+            >
+              <div
+                style={{
+                  width: `${completionRate}%`,
+                  height: "100%",
+                  background:
+                    "linear-gradient(to right, #3b82f6, #2563eb)",
+                  transition: "width 0.5s",
+                }}
+              ></div>
             </div>
-            <div style={{ overflow: "hidden", height: 12, borderRadius: 9999, backgroundColor: "#e5e7eb", marginBottom: 12 }}>
-              <div style={{ height: "100%", width: `${completionRate}%`, background: "linear-gradient(to right,#3b82f6,#2563eb)", transition: "width 0.4s" }} />
-            </div>
-            <p style={{ fontSize: 14, color: "#4b5563" }}>{total > 0 ? `${closed} of ${total} tickets completed` : "No tickets available."}</p>
+            <p
+              style={{
+                fontSize: "0.875rem",
+                color: "#4b5563",
+              }}
+            >
+              {total > 0
+                ? `${closed} of ${total} tickets completed (${completionRate}%)`
+                : "No tickets available."}
+            </p>
           </div>
 
-          <div style={{ background: "#fff", borderRadius: 12, boxShadow: "0 4px 8px rgba(0,0,0,0.06)", padding: 20 }}>
-            <h3 style={{ fontSize: 16, fontWeight: 600, color: "#1f2937", marginBottom: 12 }}>Priority Breakdown</h3>
-            <div>
-              {renderPriority("High Priority", priorityStats.high, "#fee2e2", "#dc2626")}
-              {renderPriority("Medium Priority", priorityStats.medium, "#fef9c3", "#a16207")}
-              {renderPriority("Low Priority", priorityStats.low, "#dcfce7", "#15803d")}
-            </div>
+          {/* Priority Breakdown */}
+          <div
+            style={{
+              backgroundColor: "white",
+              padding: "1.5rem",
+              borderRadius: "0.75rem",
+              boxShadow: "0 4px 6px rgba(0,0,0,0.05)",
+            }}
+          >
+            <h3
+              style={{
+                fontSize: "1rem",
+                fontWeight: 600,
+                color: "#1f2937",
+                marginBottom: "1rem",
+              }}
+            >
+              Priority Breakdown
+            </h3>
+            {renderPriority("High Priority", priorityStats.high, "#fee2e2", "#dc2626")}
+            {renderPriority("Medium Priority", priorityStats.medium, "#fef9c3", "#a16207")}
+            {renderPriority("Low Priority", priorityStats.low, "#dcfce7", "#15803d")}
           </div>
         </div>
 
         {/* Recent Tickets */}
         {recent.length > 0 && (
-          <div style={{ background: "#fff", borderRadius: 12, boxShadow: "0 4px 8px rgba(0,0,0,0.06)", padding: 20, marginBottom: 24 }}>
-            <h3 style={{ fontSize: 16, fontWeight: 600, color: "#1f2937", marginBottom: 12 }}>Recent Tickets</h3>
-            <div>
-              {recent.map((t) => (
-                <div key={t.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0", borderBottom: "1px dashed #f3f4f6" }}>
-                  <div>
-                    <p style={{ margin: 0, fontWeight: 600 }}>{t.title}</p>
-                    <p style={{ margin: 0, fontSize: 13, color: "#6b7280" }}>Priority: {t.priority}</p>
-                  </div>
-                  <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-                    <span style={{
-                      padding: "4px 10px",
-                      borderRadius: 9999,
-                      fontSize: 12,
-                      fontWeight: 600,
-                      background: t.status === "open" ? "#dcfce7" : t.status === "in_progress" ? "#fef9c3" : "#e5e7eb",
-                      color: t.status === "open" ? "#15803d" : t.status === "in_progress" ? "#a16207" : "#374151"
-                    }}>{t.status.replace("_", " ")}</span>
-                    <Link to={`/tickets/${t.id}/edit`} style={{ color: "#ca8a04", fontWeight: 600 }}>✏️</Link>
-                    <Link to={`/tickets/${t.id}/delete`} style={{ color: "#dc2626", fontWeight: 600 }}>🗑️</Link>
-                  </div>
+          <div
+            style={{
+              backgroundColor: "white",
+              padding: "1.5rem",
+              borderRadius: "0.75rem",
+              boxShadow: "0 4px 6px rgba(0,0,0,0.05)",
+              marginBottom: "2rem",
+            }}
+          >
+            <h3
+              style={{
+                fontSize: "1rem",
+                fontWeight: 600,
+                color: "#1f2937",
+                marginBottom: "1rem",
+              }}
+            >
+              Recent Tickets
+            </h3>
+            {recent.map((t) => (
+              <div
+                key={t.id}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  backgroundColor: "#f9fafb",
+                  borderRadius: "0.5rem",
+                  padding: "0.75rem 1rem",
+                  marginBottom: "0.5rem",
+                  transition: "background-color 0.3s",
+                }}
+                onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#f3f4f6")}
+                onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#f9fafb")}
+              >
+                <div>
+                  <p style={{ margin: 0, fontWeight: 600, color: "#1f2937" }}>{t.title}</p>
+                  <p style={{ margin: 0, fontSize: "0.875rem", color: "#6b7280" }}>
+                    Priority: {t.priority}
+                  </p>
                 </div>
-              ))}
-            </div>
+                <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
+                  <span
+                    style={{
+                      padding: "4px 10px",
+                      borderRadius: "9999px",
+                      fontSize: "0.75rem",
+                      fontWeight: 600,
+                      background:
+                        t.status === "open"
+                          ? "#dcfce7"
+                          : t.status === "in_progress"
+                          ? "#fef9c3"
+                          : "#e5e7eb",
+                      color:
+                        t.status === "open"
+                          ? "#15803d"
+                          : t.status === "in_progress"
+                          ? "#a16207"
+                          : "#374151",
+                      textTransform: "capitalize",
+                    }}
+                  >
+                    {t.status.replace("_", " ")}
+                  </span>
+                  <Link to={`/tickets/${t.id}/edit`} style={{ color: "#ca8a04", fontWeight: 600 }}>
+                    ✏️
+                  </Link>
+                  <Link to={`/tickets/${t.id}/delete`} style={{ color: "#dc2626", fontWeight: 600 }}>
+                    🗑️
+                  </Link>
+                </div>
+              </div>
+            ))}
           </div>
         )}
 
-        <div style={{ display: "flex", gap: 12 }}>
-          <Link to="/tickets" style={{ backgroundColor: "#2563eb", color: "#fff", padding: "0.75rem 1.25rem", borderRadius: 8, textDecoration: "none", fontWeight: 600 }}>Manage Tickets</Link>
-          <Link to="/tickets/create" style={{ backgroundColor: "#2563eb", color: "#fff", padding: "0.75rem 1.25rem", borderRadius: 8, textDecoration: "none", fontWeight: 600 }}>+ New Ticket</Link>
-        </div>
+        {/* Manage Tickets */}
+        <Link
+          to="/tickets"
+          style={{
+            display: "inline-block",
+            backgroundColor: "#2563eb",
+            color: "white",
+            padding: "0.75rem 1.5rem",
+            borderRadius: "0.5rem",
+            fontWeight: 600,
+            textDecoration: "none",
+            transition: "background-color 0.3s",
+          }}
+          onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#1d4ed8")}
+          onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#2563eb")}
+        >
+          Manage Tickets
+        </Link>
       </div>
     </div>
   );
 }
+
+// Inline helper for Priority Rows
+const renderPriority = (label: string, count: number, bg: string, color: string) => (
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: "0.75rem",
+    }}
+  >
+    <span style={{ fontSize: "0.875rem", color: "#4b5563" }}>{label}</span>
+    <span
+      style={{
+        padding: "4px 10px",
+        backgroundColor: bg,
+        color,
+        borderRadius: "9999px",
+        fontSize: "0.75rem",
+        fontWeight: 600,
+      }}
+    >
+      {count}
+    </span>
+  </div>
+);
