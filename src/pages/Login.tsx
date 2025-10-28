@@ -30,25 +30,22 @@ export default function Login() {
     <div
       style={{
         minHeight: "100vh",
-        width: "100vw",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
         background: "linear-gradient(to bottom right, #2563eb, #7c3aed)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
         padding: "1rem",
         boxSizing: "border-box",
-        overflow: "hidden",
       }}
     >
       <div
         style={{
-          backgroundColor: "white",
+          width: "100%",
+          maxWidth: "400px",
+          backgroundColor: "#fff",
           borderRadius: "1rem",
           boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)",
           padding: "2rem",
-          width: "100%",
-          maxWidth: "400px",
-          boxSizing: "border-box",
         }}
       >
         <h2
@@ -56,8 +53,8 @@ export default function Login() {
             fontSize: "1.875rem",
             fontWeight: 700,
             textAlign: "center",
-            marginBottom: "1.5rem",
             color: "#1f2937",
+            marginBottom: "1.5rem",
           }}
         >
           Welcome Back
@@ -66,48 +63,39 @@ export default function Login() {
         {success && (
           <div
             style={{
-              marginBottom: "1rem",
-              padding: "0.75rem",
               backgroundColor: "#dcfce7",
               color: "#166534",
+              padding: "0.75rem",
               borderRadius: "0.5rem",
+              marginBottom: "1rem",
             }}
           >
             {success}
           </div>
         )}
-
         {error && (
           <div
             style={{
-              marginBottom: "1rem",
-              padding: "0.75rem",
               backgroundColor: "#fee2e2",
               color: "#991b1b",
+              padding: "0.75rem",
               borderRadius: "0.5rem",
+              marginBottom: "1rem",
             }}
           >
             {error}
           </div>
         )}
 
-        <form
-          onSubmit={handleLogin}
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "1rem",
-          }}
-        >
-          {/* Email */}
+        <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
           <div>
             <label
               style={{
-                display: "block",
                 fontSize: "0.875rem",
                 fontWeight: 600,
                 color: "#374151",
                 marginBottom: "0.25rem",
+                display: "block",
               }}
             >
               Email
@@ -119,7 +107,7 @@ export default function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               style={{
-                width: "90%",
+                width: "100%",
                 padding: "0.5rem 1rem",
                 border: "1px solid #d1d5db",
                 borderRadius: "0.5rem",
@@ -138,15 +126,14 @@ export default function Login() {
             />
           </div>
 
-          {/* Password */}
           <div>
             <label
               style={{
-                display: "block",
                 fontSize: "0.875rem",
                 fontWeight: 600,
                 color: "#374151",
                 marginBottom: "0.25rem",
+                display: "block",
               }}
             >
               Password
@@ -158,7 +145,7 @@ export default function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               style={{
-                width: "90%",
+                width: "100%",
                 padding: "0.5rem 1rem",
                 border: "1px solid #d1d5db",
                 borderRadius: "0.5rem",
@@ -177,7 +164,6 @@ export default function Login() {
             />
           </div>
 
-          {/* Button */}
           <button
             type="submit"
             style={{

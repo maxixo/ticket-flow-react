@@ -12,7 +12,6 @@ export default function Signup() {
 
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
-
     const users = getUsers();
     const exists = users.find((u: any) => u.email === email);
 
@@ -22,9 +21,7 @@ export default function Signup() {
       return;
     }
 
-    const newUser = { name, email, password };
-    saveUsers([...users, newUser]);
-
+    saveUsers([...users, { name, email, password }]);
     setError("");
     setSuccess("🎉 Account created successfully! Redirecting...");
     setTimeout(() => navigate("/login"), 1500);
@@ -34,25 +31,21 @@ export default function Signup() {
     <div
       style={{
         minHeight: "100vh",
-        width: "100vw",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
         background: "linear-gradient(to bottom right, #2563eb, #7c3aed)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
         padding: "1rem",
-        boxSizing: "border-box",
-        overflow: "hidden",
       }}
     >
       <div
         style={{
-          backgroundColor: "white",
+          width: "100%",
+          maxWidth: "400px",
+          backgroundColor: "#fff",
           borderRadius: "1rem",
           boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)",
           padding: "2rem",
-          width: "100%",
-          maxWidth: "400px",
-          boxSizing: "border-box",
         }}
       >
         <h2
@@ -60,8 +53,8 @@ export default function Signup() {
             fontSize: "1.875rem",
             fontWeight: 700,
             textAlign: "center",
-            marginBottom: "1.5rem",
             color: "#1f2937",
+            marginBottom: "1.5rem",
           }}
         >
           Create an Account
@@ -70,50 +63,33 @@ export default function Signup() {
         {success && (
           <div
             style={{
-              marginBottom: "1rem",
-              padding: "0.75rem",
               backgroundColor: "#dcfce7",
               color: "#166534",
+              padding: "0.75rem",
               borderRadius: "0.5rem",
+              marginBottom: "1rem",
             }}
           >
             {success}
           </div>
         )}
-
         {error && (
           <div
             style={{
-              marginBottom: "1rem",
-              padding: "0.75rem",
               backgroundColor: "#fee2e2",
               color: "#991b1b",
+              padding: "0.75rem",
               borderRadius: "0.5rem",
+              marginBottom: "1rem",
             }}
           >
             {error}
           </div>
         )}
 
-        <form
-          onSubmit={handleSignup}
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "1rem",
-          }}
-        >
-          {/* Name */}
+        <form onSubmit={handleSignup} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
           <div>
-            <label
-              style={{
-                display: "block",
-                fontSize: "0.875rem",
-                fontWeight: 600,
-                color: "#374151",
-                marginBottom: "0.25rem",
-              }}
-            >
+            <label style={{ display: "block", fontSize: "0.875rem", fontWeight: 600, color: "#374151" }}>
               Name
             </label>
             <input
@@ -123,7 +99,7 @@ export default function Signup() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               style={{
-                width: "90%",
+                width: "100%",
                 padding: "0.5rem 1rem",
                 border: "1px solid #d1d5db",
                 borderRadius: "0.5rem",
@@ -142,17 +118,8 @@ export default function Signup() {
             />
           </div>
 
-          {/* Email */}
           <div>
-            <label
-              style={{
-                display: "block",
-                fontSize: "0.875rem",
-                fontWeight: 600,
-                color: "#374151",
-                marginBottom: "0.25rem",
-              }}
-            >
+            <label style={{ display: "block", fontSize: "0.875rem", fontWeight: 600, color: "#374151" }}>
               Email
             </label>
             <input
@@ -162,7 +129,7 @@ export default function Signup() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               style={{
-                width: "90%",
+                width: "100%",
                 padding: "0.5rem 1rem",
                 border: "1px solid #d1d5db",
                 borderRadius: "0.5rem",
@@ -181,17 +148,8 @@ export default function Signup() {
             />
           </div>
 
-          {/* Password */}
           <div>
-            <label
-              style={{
-                display: "block",
-                fontSize: "0.875rem",
-                fontWeight: 600,
-                color: "#374151",
-                marginBottom: "0.25rem",
-              }}
-            >
+            <label style={{ display: "block", fontSize: "0.875rem", fontWeight: 600, color: "#374151" }}>
               Password
             </label>
             <input
@@ -201,7 +159,7 @@ export default function Signup() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               style={{
-                width: "90%",
+                width: "100%",
                 padding: "0.5rem 1rem",
                 border: "1px solid #d1d5db",
                 borderRadius: "0.5rem",
