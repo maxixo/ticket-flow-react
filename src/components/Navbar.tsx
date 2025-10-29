@@ -1,6 +1,6 @@
 // src/components/Navbar.tsx
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { logout } from "../utils/storage";
 import "../App.css";
 
@@ -9,6 +9,7 @@ export default function Navbar() {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Check authentication status on component mount and when localStorage changes
   useEffect(() => {
@@ -61,9 +62,191 @@ export default function Navbar() {
     navigate("/");
   };
 
-  const handleLogin = () => {
-    setMenuOpen(false);
-    navigate("/login");
+  // Determine which links to show based on current page
+  const isDashboard = location.pathname === "/dashboard";
+  const isTicketList = location.pathname === "/tickets" || location.pathname === "/ticket-list";
+  const isLanding = location.pathname === "/" || location.pathname === "/landing";
+
+  const renderLinks = () => {
+    if (isLoggedIn) {
+      // Dashboard page: Show only Logout
+      if (isDashboard) {
+        return (
+          <button
+            onClick={handleLogout}
+            style={{
+              background: "none",
+              border: "none",
+              color: "#dc2626",
+              fontWeight: 600,
+              cursor: "pointer",
+              fontSize: "1rem",
+              transition: "color 0.3s",
+              padding: isMobile ? "0.5rem 0" : "0",
+            }}
+            onMouseOver={(e) => (e.currentTarget.style.color = "#b91c1c")}
+            onMouseOut={(e) => (e.currentTarget.style.color = "#dc2626")}
+          >
+            Logout
+          </button>
+        );
+      }
+
+      // Ticket List page: Show Dashboard and Logout
+      if (isTicketList) {
+        return (
+          <>
+            <Link
+              to="/dashboard"
+              onClick={() => handleLinkClick("/dashboard")}
+              style={{
+                color: "#2563eb",
+                textDecoration: "none",
+                fontWeight: 600,
+                fontSize: "1rem",
+                transition: "color 0.3s",
+                padding: isMobile ? "0.5rem 0" : "0",
+              }}
+              onMouseOver={(e) => (e.currentTarget.style.color = "#1d4ed8")}
+              onMouseOut={(e) => (e.currentTarget.style.color = "#2563eb")}
+            >
+              Dashboard
+            </Link>
+
+            <button
+              onClick={handleLogout}
+              style={{
+                background: "none",
+                border: "none",
+                color: "#dc2626",
+                fontWeight: 600,
+                cursor: "pointer",
+                fontSize: "1rem",
+                transition: "color 0.3s",
+                padding: isMobile ? "0.5rem 0" : "0",
+              }}
+              onMouseOver={(e) => (e.currentTarget.style.color = "#b91c1c")}
+              onMouseOut={(e) => (e.currentTarget.style.color = "#dc2626")}
+            >
+              Logout
+            </button>
+          </>
+        );
+      }
+
+      // Other logged-in pages: Show Dashboard, Tickets, and Logout
+      return (
+        <>
+          <Link
+            to="/dashboard"
+            onClick={() => handleLinkClick("/dashboard")}
+            style={{
+              color: "#2563eb",
+              textDecoration: "none",
+              fontWeight: 600,
+              fontSize: "1rem",
+              transition: "color 0.3s",
+              padding: isMobile ? "0.5rem 0" : "0",
+            }}
+            onMouseOver={(e) => (e.currentTarget.style.color = "#1d4ed8")}
+            onMouseOut={(e) => (e.currentTarget.style.color = "#2563eb")}
+          >
+            Dashboard
+          </Link>
+
+          <Link
+            to="/tickets"
+            onClick={() => handleLinkClick("/tickets")}
+            style={{
+              color: "#2563eb",
+              textDecoration: "none",
+              fontWeight: 600,
+              fontSize: "1rem",
+              transition: "color 0.3s",
+              padding: isMobile ? "0.5rem 0" : "0",
+            }}
+            onMouseOver={(e) => (e.currentTarget.style.color = "#1d4ed8")}
+            onMouseOut={(e) => (e.currentTarget.style.color = "#2563eb")}
+          >
+            Tickets
+          </Link>
+
+          <button
+            onClick={handleLogout}
+            style={{
+              background: "none",
+              border: "none",
+              color: "#dc2626",
+              fontWeight: 600,
+              cursor: "pointer",
+              fontSize: "1rem",
+              transition: "color 0.3s",
+              padding: isMobile ? "0.5rem 0" : "0",
+            }}
+            onMouseOver={(e) => (e.currentTarget.style.color = "#b91c1c")}
+            onMouseOut={(e) => (e.currentTarget.style.color = "#dc2626")}
+          >
+            Logout
+          </button>
+        </>
+      );
+    }
+
+    // Landing page or not logged in: Show Login, Contact, Tickets
+    return (
+      <>
+        <Link
+          to="/login"
+          onClick={() => handleLinkClick("/login")}
+          style={{
+            color: "#2563eb",
+            textDecoration: "none",
+            fontWeight: 600,
+            fontSize: "1rem",
+            transition: "color 0.3s",
+            padding: isMobile ? "0.5rem 0" : "0",
+          }}
+          onMouseOver={(e) => (e.currentTarget.style.color = "#1d4ed8")}
+          onMouseOut={(e) => (e.currentTarget.style.color = "#2563eb")}
+        >
+          Login
+        </Link>
+
+        <Link
+          to="/contact"
+          onClick={() => handleLinkClick("/contact")}
+          style={{
+            color: "#2563eb",
+            textDecoration: "none",
+            fontWeight: 600,
+            fontSize: "1rem",
+            transition: "color 0.3s",
+            padding: isMobile ? "0.5rem 0" : "0",
+          }}
+          onMouseOver={(e) => (e.currentTarget.style.color = "#1d4ed8")}
+          onMouseOut={(e) => (e.currentTarget.style.color = "#2563eb")}
+        >
+          Contact
+        </Link>
+
+        <Link
+          to="/tickets"
+          onClick={() => handleLinkClick("/tickets")}
+          style={{
+            color: "#2563eb",
+            textDecoration: "none",
+            fontWeight: 600,
+            fontSize: "1rem",
+            transition: "color 0.3s",
+            padding: isMobile ? "0.5rem 0" : "0",
+          }}
+          onMouseOver={(e) => (e.currentTarget.style.color = "#1d4ed8")}
+          onMouseOut={(e) => (e.currentTarget.style.color = "#2563eb")}
+        >
+          Tickets
+        </Link>
+      </>
+    );
   };
 
   return (
@@ -81,7 +264,7 @@ export default function Navbar() {
         left: 0,
         right: 0,
         zIndex: 1000,
-        boxShadow: "0 4px 10px rgba(0,0,0,0.15)",
+        boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
       }}
     >
       {/* Logo */}
@@ -89,7 +272,7 @@ export default function Navbar() {
         style={{
           color: "#2563eb",
           fontWeight: 700,
-          fontSize: "1.25rem",
+          fontSize: "1.5rem",
           letterSpacing: "0.5px",
           userSelect: "none",
           cursor: "pointer",
@@ -125,81 +308,17 @@ export default function Navbar() {
           position: isMobile ? "absolute" : "static",
           top: "64px",
           right: 0,
-          background: isMobile ? "rgba(37,99,235,0.97)" : "transparent",
+          background: isMobile ? "white" : "transparent",
           width: isMobile ? "100%" : "auto",
-          padding: isMobile ? "1rem 0" : 0,
-          gap: isMobile ? "1.25rem" : "2rem",
+          padding: isMobile ? "1.5rem 0" : 0,
+          gap: "1rem",
           alignItems: "center",
           textAlign: "center",
           transition: "all 0.3s ease",
+          boxShadow: isMobile ? "0 4px 6px rgba(0,0,0,0.1)" : "none",
         }}
       >
-        {isLoggedIn ? (
-          <>
-            <Link
-              to="/dashboard"
-              onClick={() => handleLinkClick("/dashboard")}
-              style={{
-                color: isMobile ? "white" : "#2563eb",
-                textDecoration: "none",
-                fontWeight: 500,
-                fontSize: "1rem",
-                transition: "color 0.3s",
-              }}
-            >
-              Dashboard
-            </Link>
-
-            <button
-              onClick={handleLogout}
-              style={{
-                background: "none",
-                border: "none",
-                color: isMobile ? "white" : "#dc2626",
-                fontWeight: 600,
-                cursor: "pointer",
-                fontSize: "1rem",
-                transition: "color 0.3s",
-              }}
-              onMouseOver={(e) => !isMobile && (e.currentTarget.style.color = "#b91c1c")}
-              onMouseOut={(e) => !isMobile && (e.currentTarget.style.color = "#dc2626")}
-            >
-              Logout
-            </button>
-          </>
-        ) : (
-          <>
-            <Link
-              to="/"
-              onClick={() => handleLinkClick("/")}
-              style={{
-                color: isMobile ? "white" : "#2563eb",
-                textDecoration: "none",
-                fontWeight: 500,
-                fontSize: "1rem",
-                transition: "color 0.3s",
-              }}
-            >
-              Home
-            </Link>
-
-            <button
-              onClick={handleLogin}
-              style={{
-                background: "white",
-                border: "none",
-                color:  "#2563eb",
-                fontWeight: 600,
-                cursor: "pointer",
-                fontSize: "1rem",
-                borderRadius: "0.5rem",
-              }}
-             
-            >
-              Login
-            </button>
-          </>
-        )}
+        {renderLinks()}
       </div>
     </nav>
   );
